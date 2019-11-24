@@ -18,12 +18,12 @@ import Table from 'utils/Table';
 import Input from 'utils/Input';
 import Modal from 'utils/Modal';
 import Anchor from 'utils/Anchor';
-import Tutorial from 'specializations/Tutorial';
+import Tutorial from 'helpers/Tutorial';
 import ExportToPDF from 'functions/ExportToPDF';
 import UnorderedList from 'utils/UnorderedList';
-import WaitIndicator from 'specializations/WaitIndicator';
+import WaitIndicator from 'helpers/WaitIndicator';
 import DurationButton from 'specializations/DurationButton';
-import SectionDescription from 'specializations/SectionDescription';
+import SectionDescription from 'helpers/SectionDescription';
 
 
 class Grid extends React.Component {

@@ -42,8 +42,10 @@ class Controller extends React.Component {
     /**
      * Send requests to get initial data for the components.
      */
-    init() {
+    async init() {
         var populate = this.getPopulateParameter();
+
+        await this.state.connector.pingServer();
 
         var initializations = [
             this.state.connector.getHeaderData(populate).then(res => this.setComponentData("header", res, false)),
@@ -96,6 +98,7 @@ class Controller extends React.Component {
         console.log("rendering components...");
 
         var setGridChecklistQuantity;
+        var connector = this.state.connector;
         var components = this.state.components;
         var componentObjects = this.state.componentObjects;
 
@@ -123,9 +126,19 @@ class Controller extends React.Component {
                 "callback": componentCallback,
                 "createComponent": createComponent,
                 "initData": components.header,
-                "removeComponent": removeComponent
+                "removeComponent": removeComponent,
+                "serverStatus": connector.state.connectionStatus
             }, document.getElementById("dynamicHeader"), function() {
                 setComponentData("header", this, true);
+
+                // Check the connection to the server every 60 seconds.
+                setInterval(() => {
+                    connector.pingServer().then(() => {
+                        this.serverStatus.setState({
+                            "status": connector.state.connectionStatus
+                        });
+                    });
+                }, 60000);
         });
 
         this.renderComponent(GridChecklist, {
@@ -138,7 +151,7 @@ class Controller extends React.Component {
         this.renderComponent(Grid, {
                 "callback": componentCallback,
                 "createComponent": createComponent,
-                "getGrids": this.state.connector.getGridArrays.bind(this),
+                "getGrids": connector.getGridArrays.bind(this),
                 "gridChecklistCallback": componentObjects.gridChecklist.setCreateGridComponents.bind(componentObjects.gridChecklist),
                 "initData": components.grid,
                 "getSetTitle": componentObjects.header.getSelectedSet.bind(componentObjects.header),
@@ -150,7 +163,7 @@ class Controller extends React.Component {
 
         this.renderComponent(InstructorPreferences, {
                 "callback": componentCallback,
-                "getPreferenceData": this.state.connector.getPreferenceData,
+                "getPreferenceData": connector.getPreferenceData,
                 "initData": components.instructorPreferences
             }, document.getElementById("dynamicInstructorPreferences"),
             function() {
@@ -182,14 +195,14 @@ class Controller extends React.Component {
                 "callback": componentCallback,
                 "createComponent": createComponent,
                 "initData": components.privates,
-                "getInstructorData": this.state.connector.getInstructorData,
+                "getInstructorData": connector.getInstructorData,
                 "removeComponent": removeComponent,
                 "setChecklistQuantity": setGridChecklistQuantity
             }, document.getElementById("dynamicPrivates"), function() {
                 setComponentData("privates", this, true);
         });
 
-        this.state.connector.getReleaseVersion()
+        connector.getReleaseVersion()
             .then(res => {
                 var headerState = JSON.parse(JSON.stringify(components.header));
 

@@ -3,8 +3,8 @@
  * AUTHOR:      Isaac Streight
  * START DATE:  May 28th, 2018
  *
- * This file contains the SectionDescription class, a specialization class for the
- *  section descriptions of the application in the major component section.
+ * This file contains the SectionDescription class, a helper class for
+ *  the section descriptions of the application in the major component section.
  */
 
 import React from 'react';

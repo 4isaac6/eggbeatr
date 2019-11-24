@@ -17,7 +17,8 @@ import Animator from 'functions/Animator';
 import SetList from 'specializations/SetList';
 import UnorderedList from 'utils/UnorderedList';
 import EditButton from 'specializations/EditButton';
-import WaitIndicator from 'specializations/WaitIndicator';
+import ServerStatus from 'helpers/ServerStatus';
+import WaitIndicator from 'helpers/WaitIndicator';
 import ScrollingAnchor from 'specializations/ScrollingAnchor';
 
 
@@ -301,6 +302,10 @@ class Header extends React.Component {
                     data={ this.state.data.versionName }
                     styleClass={ "pure-menu-heading" }
                 />
+                <ServerStatus
+                    callback={ (ref) => this.setComponentReference("serverStatus", ref) }
+                    status={ this.props.serverStatus }
+                />
                 <Anchor
                     data={ "SET" }
                     handleClick={ () => null }
@@ -393,7 +398,8 @@ Header.propTypes = {
     callback: PropTypes.func.isRequired,
     createComponent: PropTypes.func.isRequired,
     initData: PropTypes.object.isRequired,
-    removeComponent: PropTypes.func.isRequired
+    removeComponent: PropTypes.func.isRequired,
+    serverStatus: PropTypes.bool.isRequired
 }
 
 export default Header;

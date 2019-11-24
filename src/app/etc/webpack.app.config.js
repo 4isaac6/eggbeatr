@@ -24,6 +24,7 @@ module.exports = {
             'components': path.resolve(__dirname, contentBase, 'components'),
             'css': path.resolve(__dirname, contentBase, 'assets/css'),
             'functions': path.resolve(__dirname, contentBase, 'assets/utils/functions'),
+            'helpers': path.resolve(__dirname, contentBase, 'assets/helpers'),
             'root': path.resolve(__dirname, '../../../'),
             'specializations': path.resolve(__dirname, contentBase, 'assets/specializations'),
             'src': path.resolve(__dirname, contentBase),

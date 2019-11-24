@@ -3,7 +3,7 @@
  * AUTHOR:      Isaac Streight
  * START DATE:  July 7th, 2018
  *
- * This file contains the WaitIndicator class, the class for displaying
+ * This file contains the WaitIndicator class, a helper class for displaying
  *  wait indicators throughout the application.
  */
 
