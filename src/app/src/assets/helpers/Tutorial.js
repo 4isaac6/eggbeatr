@@ -3,7 +3,7 @@
  * AUTHOR:      Isaac Streight
  * START DATE:  May 28th, 2018
  *
- * This file contains the Tutorial class, a specialization class for the
+ * This file contains the Tutorial class, a helper class for the
  *  tutorial descriptions of the application.
  */
 

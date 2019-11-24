@@ -22,6 +22,57 @@
     }
 }
 
+@keyframes pulse-green {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 171, 102, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 171, 102, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 171, 102, 0);
+	}
+}
+
+@keyframes pulse-yellow {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(223, 117, 20, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(223, 117, 20, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(223, 117, 20, 0);
+	}
+}
+
+@keyframes pulse-red {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(202, 60, 60, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(202, 60, 60, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(202, 60, 60, 0);
+	}
+}
+
 /* Show scrollbars */
 ::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -309,6 +360,50 @@ tbody td:first-child {
     margin: 5% 40px 0 0;
 }
 
+.success-cell {
+    color: white;
+    background-color: rgb(0, 171, 102) !important;
+}
+
+.warning-cell {
+    color: white;
+    background-color: rgb(223, 117, 20) !important;
+}
+
+.error-cell {
+    color: white;
+    background-color: rgb(202, 60, 60) !important;
+}
+
+.server-status {
+    display: inline-block;
+    font-size: 0.5em;
+}
+
+.circle {
+    width: 8px;
+    height: 8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+}
+
+.server-status > .success-cell {
+	box-shadow: 0 0 0 0 rgba(0, 171, 102, 1);
+	animation: pulse-green 2s 3;
+}
+
+.server-status > .warning-cell {
+	box-shadow: 0 0 0 0 rgba(223, 117, 20, 1);
+	animation: pulse-yellow 2s 3;
+}
+
+.server-status > .error-cell {
+	box-shadow: 0 0 0 0 rgba(202, 60, 60, 1);
+	animation: pulse-red 2s 3;
+}
+
 #dynamicLanding, #dynamicAbout, #dynamicInstructors, #dynamicLessons, #dynamicPrivates, #dynamicGrid {
     height: 92vh;
 }
@@ -334,7 +429,7 @@ tbody td:first-child {
 #dynamicHeader .wait-indicator {
     position: absolute;
     top: 15px;
-    margin-left: 48%;
+    margin-left: 47%;
     color: #6FBEF3;
 }
 
@@ -556,16 +651,6 @@ tbody td:first-child {
 
 
 /* LESSONS */
-
-.warning-cell {
-    color: white;
-    background-color: rgb(223, 117, 20) !important;
-}
-
-.error-cell {
-    color: white;
-    background-color: rgb(202, 60, 60) !important;
-}
 
 #dynamicLessons {
     padding: 45px;

@@ -22,6 +22,7 @@ class Connector extends React.Component {
         this.defaults = (new ComponentData).getDefaultData();
 
         this.state = {
+            "connectionStatus": null,
             "headerId": 1
         };
     }
@@ -30,6 +31,17 @@ class Connector extends React.Component {
         this.state = {
             "headerId": newId
         };
+    }
+
+    async pingServer() {
+        try {
+            const res = await fetch(this.props.serverURI);
+            this.state.connectionStatus = res.ok;
+            return res;
+        } catch (err) {
+            this.state.connectionStatus = false;
+            return err;
+        }
     }
 
     getGridArrays(payload) {
@@ -60,7 +72,7 @@ class Connector extends React.Component {
             returnValue = new Promise((resolve) => resolve(defaultRes));
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/grid?headerId=' + this.state.headerId)
                 .then(res => res.json())
                 .then(json => this.formatGridRes(json))
@@ -69,6 +81,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
@@ -144,7 +159,7 @@ class Connector extends React.Component {
             returnValue = new Promise((resolve) => resolve(defaultRes));
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/headers')
                 .then(res => res.json())
                 .then(json => this.formatHeaderRes(json))
@@ -153,6 +168,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
@@ -220,7 +238,7 @@ class Connector extends React.Component {
             returnValue = new Promise((resolve) => resolve(defaultRes));
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/instructors?headerId=' + this.state.headerId)
                 .then(res => res.json())
                 .then(json => this.formatInstructorRes(json))
@@ -229,6 +247,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
@@ -307,7 +328,7 @@ class Connector extends React.Component {
             returnValue = new Promise((resolve) => resolve(defaultRes));
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/lessons?headerId=' + this.state.headerId)
                 .then(res => res.json())
                 .then(json => this.formatLessonsRes(json))
@@ -316,6 +337,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
@@ -392,7 +416,7 @@ class Connector extends React.Component {
             returnValue = defaultRes;
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/preferences?headerId=' + this.state.headerId)
                 .then(res => res.json())
                 .then(json => this.formatPreferenceRes(json))
@@ -401,6 +425,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
@@ -503,7 +530,7 @@ class Connector extends React.Component {
             returnValue = defaultRes;
         } else if (populate === "none") {
             returnValue = new Promise((resolve) => resolve({}));
-        } else {
+        } else if (this.state.connectionStatus) {
             returnValue = fetch(this.props.serverURI + '/api/privates?headerId=' + this.state.headerId)
                 .then(res => res.json())
                 .then(json => this.formatPrivatesRes(json))
@@ -512,6 +539,9 @@ class Connector extends React.Component {
                     return defaultRes;
                 }
             );
+        } else {
+            // Try to retrieve data from localStorage.
+            returnValue = new Promise((resolve) => resolve({}));
         }
 
         return returnValue;
