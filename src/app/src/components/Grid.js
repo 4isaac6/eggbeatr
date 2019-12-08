@@ -139,6 +139,10 @@ class Grid extends React.Component {
      * Check that the duration and lessonTimes fields are set in the state.
      */
     verifyData() {
+        if (Object.keys(this.state).length === 0) {
+            return false;
+        }
+
         var lessonTimes = this.state.data.lessonTimes;
         var reDuration = new RegExp(/^([1-9](\.5)?|0\.5)$/);
         var validDuration = reDuration.test(this.state.data.duration);

@@ -97,6 +97,7 @@ class Controller extends React.Component {
     renderComponents() {
         console.log("rendering components...");
 
+        var _this = this;
         var setGridChecklistQuantity;
         var connector = this.state.connector;
         var components = this.state.components;
@@ -112,15 +113,15 @@ class Controller extends React.Component {
             Landing, {}, document.getElementById("dynamicLanding")
         );
 
+        this.renderComponent(
+            About, {}, document.getElementById("dynamicAbout")
+        );
+
         this.renderComponent(Footer, {
             "callback": componentCallback
         }, document.getElementById("dynamicFooter"), function() {
             setComponentData("footer", this, true);
         });
-
-        this.renderComponent(
-            About, {}, document.getElementById("dynamicAbout")
-        );
 
         this.renderComponent(Header, {
                 "callback": componentCallback,
@@ -133,11 +134,10 @@ class Controller extends React.Component {
 
                 // Check the connection to the server every 60 seconds.
                 setInterval(() => {
-                    connector.pingServer().then(() => {
-                        this.serverStatus.setState({
-                            "status": connector.state.connectionStatus
-                        });
-                    });
+                    var prevStatus = connector.state.connectionStatus;
+
+                    _this.updateServerStatus(prevStatus)
+                        .then((status) => prevStatus = status);
                 }, 60000);
         });
 
@@ -206,9 +206,15 @@ class Controller extends React.Component {
             .then(res => {
                 var headerState = JSON.parse(JSON.stringify(components.header));
 
-                Object.assign(headerState.data, {
-                    "versionName": res.data.name
-                });
+                if (headerState.data) {
+                    Object.assign(headerState.data, {
+                        "versionName": res.data.name
+                    });
+                } else {
+                    headerState.data = {
+                        "versionName": res.data.name
+                    };
+                }
 
                 componentObjects.footer.setState(res);
                 componentObjects.header.setState(headerState);
@@ -241,7 +247,9 @@ class Controller extends React.Component {
         console.log("adding data from " + componentName + ".js to controllerData...");
 
         if (componentName === "header") {
-            this.state.connector.setHeaderId(component.data.selectedSet.id);
+            if (component.data.selectedSet.id) {
+                this.state.connector.setHeaderId(component.data.selectedSet.id);
+            }
 
             return this.init().then(() => this.updateComponents(updateDatabase));
         } else {
@@ -299,7 +307,7 @@ class Controller extends React.Component {
                     lessonsComponent.displayComponentState();
                 } else if (name === "privates") {
                     let privatesComponent = comp;
-                    privatesComponent.privateLessons = this.state.components[name];
+                    privatesComponent.state = this.state.components[name];
 
                     this.state.componentObjects.gridChecklist.setQuantity(
                         "privates",
@@ -370,7 +378,12 @@ class Controller extends React.Component {
         console.log("manipulating controllerData...");
 
         if (updateDatabase) {
-            this.updateDatabase(componentName);
+            this.updateServerStatus(this.state.connector.state.connectionStatus)
+                .then((status) => {
+                    if (status) {
+                        this.updateDatabase(componentName);
+                    }
+                });
         }
 
         // Add instructors to controllerData.
@@ -385,7 +398,9 @@ class Controller extends React.Component {
 
         // Array of valid instructors.
         var instructors = this.state.controllerData.instructors.data;
-        this.state.controllerData.instructorsArray = Object.keys(instructors);
+        if (instructors !== undefined) {
+            this.state.controllerData.instructorsArray = Object.keys(instructors);
+        }
 
         // Add lesson quantites and number of 1/2 & 3/4 hour lessons to controllerData.
         this.state.controllerData.lessons = Object.assign(
@@ -504,6 +519,17 @@ class Controller extends React.Component {
     assignUpdates(res) {
         var obj = {};
 
+        if (res.includes(undefined)) {
+            return { "data": obj };
+        } else {
+            var emptyObjects = res
+                .filter((element) => Object.keys(element) == 0);
+
+            if (emptyObjects.length === res.length) {
+                return { "data": obj };
+            }
+        }
+
         for (let i = 0; i < res.length; i++) {
             let keys = Object.keys(res[i]);
 
@@ -580,6 +606,23 @@ class Controller extends React.Component {
         console.log("Sent delete " + component + " request to database.");
 
         return promise;
+    }
+
+    updateServerStatus(prevStatus) {
+        return this.state.connector.pingServer().then(() => {
+            var status = this.state.connector.state.connectionStatus;
+
+            this.state.componentObjects.header.serverStatus.setState({
+                "status": status
+            });
+
+            if (!prevStatus && status) {
+                // Update state of each component by getting new initData.
+                this.init().then(() => this.updateComponents(true));
+            }
+
+            return status;
+        });
     }
 }
 

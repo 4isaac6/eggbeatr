@@ -20,6 +20,10 @@ class PrivatesTable extends React.Component {
         this.state = { ...props };
     }
 
+    static getDerivedStateFromProps(nextProps) {
+        return nextProps;
+    }
+
     add(inputValues) {
         return this.state.addCallback({
             "duration": inputValues[2],

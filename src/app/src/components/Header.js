@@ -274,11 +274,15 @@ class Header extends React.Component {
      */
     sortSets(newState) {
         var newSets = [];
-        var newSelectedSet = newState.data.selectedSet;
+        var newSelectedSet = "";
 
-        Object.keys(newState.data.sets).sort().forEach((key) => {
-            newSets.push(newState.data.sets[key]);
-        });
+        if (newState.data !== undefined) {
+            newSelectedSet = newState.data.selectedSet;
+
+            Object.keys(newState.data.sets).sort().forEach((key) => {
+                newSets.push(newState.data.sets[key]);
+            });
+        }
 
         return {
             "data": {

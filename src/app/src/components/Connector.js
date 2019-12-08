@@ -45,6 +45,10 @@ class Connector extends React.Component {
     }
 
     getGridArrays(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -90,6 +94,10 @@ class Connector extends React.Component {
     }
 
     setGridData(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -104,6 +112,10 @@ class Connector extends React.Component {
     }
 
     updateGridData(gridId, payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -118,6 +130,10 @@ class Connector extends React.Component {
     }
 
     deleteGridData(gridId) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/grid/' + gridId + '?headerId=' + this.state.headerId, {
                 method: 'DELETE'
         })
@@ -177,6 +193,10 @@ class Connector extends React.Component {
     }
 
     setHeaderData(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -191,6 +211,10 @@ class Connector extends React.Component {
     }
 
     deleteHeaderData(headerId) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/headers/' + headerId, {
                 method: 'DELETE'
         })
@@ -256,6 +280,10 @@ class Connector extends React.Component {
     }
 
     setInstructorData(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -270,6 +298,10 @@ class Connector extends React.Component {
     }
 
     updateInstructorData(instructorId, payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -284,6 +316,10 @@ class Connector extends React.Component {
     }
 
     deleteInstructorData(instructorId) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/instructors/' + instructorId + '?headerId=' + this.state.headerId, {
                 method: 'DELETE'
         })
@@ -346,6 +382,10 @@ class Connector extends React.Component {
     }
 
     setLessonData(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -360,6 +400,10 @@ class Connector extends React.Component {
     }
 
     updateLessonData(lessonId, payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -374,6 +418,10 @@ class Connector extends React.Component {
     }
 
     deleteLessonData(lessonId) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/lessons/' + lessonId + '?headerId=' + this.state.headerId, {
                 method: 'DELETE'
         })
@@ -434,6 +482,10 @@ class Connector extends React.Component {
     }
 
     updatePreferenceData(preferenceId, payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -448,6 +500,10 @@ class Connector extends React.Component {
     }
 
     formatPreferenceRes(preferenceRes) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var defaultRes = JSON.parse(
             JSON.stringify(this.defaults.InstructorPreferences)
         );
@@ -548,6 +604,10 @@ class Connector extends React.Component {
     }
 
     setPrivatesData(payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -562,6 +622,10 @@ class Connector extends React.Component {
     }
 
     updatePrivatesData(privatesId, payload) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -576,6 +640,10 @@ class Connector extends React.Component {
     }
 
     deletePrivatesData(privatesId) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/privates/' + privatesId + '?headerId=' + this.state.headerId, {
                 method: 'DELETE'
         })
@@ -584,6 +652,10 @@ class Connector extends React.Component {
     }
 
     formatPrivatesRes(privatesRes) {
+        if (!this.state.connectionStatus) {
+            return new Promise((resolve) => resolve({}));
+        }
+
         return fetch(this.props.serverURI + '/api/instructors?headerId=' + this.state.headerId)
             .then(res => res.json()).then((instructors) => {
                 var newObject = {
