@@ -51,6 +51,8 @@ class Lessons extends React.Component {
      * Finds values in the input field to store in the state.
      */
     storeLessonValues() {
+        var data;
+        var missingId;
         var finalPromise;
         var data = this.state.data;
         var savedNotification = ReactDOM.findDOMNode(this).querySelector('div.content-section-description div');
@@ -59,33 +61,36 @@ class Lessons extends React.Component {
             Animator.fadeOut(savedNotification, 400);
         });
 
-        this.setLessonValue(data);
+        this.setLessonValue(() => {
+            data = this.state.data;
 
-        var missingId = Object.keys(data).filter((value) => data[value].id === undefined);
+            missingId = Object.keys(data)
+                .filter((value) => data[value].id === undefined);
 
-        if (missingId.length > 0) {
-            finalPromise = this.createDatabaseEntry(missingId);
-        } else {
-            finalPromise = new Promise((resolve) => resolve());
-        }
+            if (missingId.length > 0) {
+                finalPromise = this.createDatabaseEntry(missingId);
+            } else {
+                finalPromise = new Promise((resolve) => resolve());
+            }
 
-        finalPromise.then(() => {
-            this.props.callback(this.state, "lessons", true);
-            this.props.setChecklistQuantity("lessons", this.getComponentQuantity());
+            finalPromise.then(() => {
+                this.props.callback(this.state, "lessons", true);
+                this.props.setChecklistQuantity("lessons", this.getComponentQuantity());
+            });
         });
     }
 
     /**
      * Store the values from the input fields.
      */
-    setLessonValue(data) {
+    setLessonValue(cb) {
         this.lessonInputs.forEach((lessonInput) => {
+            var lessonData;
             var newLesson = {};
             var lessonId = undefined;
             var lessonType = lessonInput.state.name;
             var lessonValue = +lessonInput.state.value;
             var reSingleDigit = new RegExp(/^[0-9]$/);
-            var lessonData = this.state.data[lessonType];
             var inputNode = ReactDOM.findDOMNode(lessonInput);
             var cellClassList = inputNode.parentElement.classList;
 
@@ -98,8 +103,13 @@ class Lessons extends React.Component {
                 Animator.fadeIn(inputNode.parentElement, 400);
             }
 
-            if (lessonType in data) {
-                lessonId = lessonData.id;
+            if (this.state.data) {
+                if (lessonType in this.state.data) {
+                    lessonData = this.state.data[lessonType];
+                    lessonId = lessonData.id;
+                }
+            } else {
+                this.state.data = {};
             }
 
             newLesson[lessonType] = {
@@ -110,7 +120,7 @@ class Lessons extends React.Component {
             Object.assign(this.state.data, newLesson);
         });
 
-        this.setState(this.state);
+        this.setState(this.state, cb);
     }
 
      /**
@@ -149,6 +159,10 @@ class Lessons extends React.Component {
      *  in the related inputs.
      */
     displayComponentState() {
+        if (Object.keys(this.state).length === 0) {
+            return;
+        }
+
         // Set the value of the lesson inputs based on the related lessons quantity.
         this.lessonInputs.forEach((lessonInput) => {
             var lessonType = lessonInput.state.name;
@@ -168,8 +182,7 @@ class Lessons extends React.Component {
                         "value": lessonQuantity
                     });
                 } else {
-                    lessonInput.setState({
-                    });
+                    lessonInput.setState({});
                 }
             }
         });

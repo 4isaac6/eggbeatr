@@ -71,6 +71,10 @@ class Privates extends React.Component {
      * Count the number of private lessons.
      */
     getComponentQuantity() {
+        if (Object.keys(this.state).length === 0) {
+            return 0;
+        }
+
         var numPrivates = 0;
 
         for (let instructor in this.state.data) {
@@ -122,6 +126,10 @@ class Privates extends React.Component {
      * Sort object keys alphabetically into the state.
      */
     sortPrivates(privates) {
+        if (privates === undefined) {
+            return;
+        }
+
         var obj = {};
         var allKeys = [];
 

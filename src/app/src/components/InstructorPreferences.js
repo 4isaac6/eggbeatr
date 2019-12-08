@@ -22,7 +22,6 @@ class InstructorPreferences extends React.Component {
         super(props);
 
         this.state = { ...props.initData };
-        this.selectedInstructor = Object.keys(props.initData.data)[0];
         this.defaultPreferences = [
             ["Starfish", "Sea Otter", "Level 1", "Level 6", "Basics I"],
             ["Duck", "Salamander", "Level 2", "Level 7", "Basics II"],
@@ -30,6 +29,10 @@ class InstructorPreferences extends React.Component {
             ["", "Crocodile", "Level 4", "Level 9", ""],
             ["Simple Set", "Whale", "Level 5", "Level 10", "Schoolboard"]
         ];
+
+        if (Object.keys(props.initData) > 0) {
+            this.selectedInstructor = Object.keys(props.initData.data)[0];
+        }
     }
 
     componentDidMount() {
@@ -62,12 +65,19 @@ class InstructorPreferences extends React.Component {
      * Style the cell based on instructor preferences.
      */
     getCellStyle(data, index) {
+        var isSelected;
+        var preference;
         var lesson = data[0];
         var cellClass = "is-left ";
         var lessonType = lesson.props.data;
         var instructor = this.selectedInstructor;
-        var preference = this.state.data[instructor];
-        var isSelected = preference.lessons.includes(lessonType);
+
+        if (Object.keys(this.state).length > 0 && instructor in this.state.data) {
+            preference = this.state.data[instructor];
+            isSelected = preference.lessons.includes(lessonType);
+        } else {
+            isSelected = false;
+        }
 
         // Style non-selected cells.
         if (!isSelected && this.editButton) {

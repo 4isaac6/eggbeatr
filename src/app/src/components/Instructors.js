@@ -24,8 +24,6 @@ class Instructors extends React.Component {
     }
 
     componentDidMount() {
-        this.displayComponentState();
-
         this.props.callback(this.state, "instructors", false);
         this.props.setChecklistQuantity("instructors", this.getComponentQuantity());
     }
@@ -34,6 +32,10 @@ class Instructors extends React.Component {
      * Get number of stored lessons.
      */
     getComponentQuantity() {
+        if (Object.keys(this.state).length === 0) {
+            return 0;
+        }
+
         var validInstructors;
         var instructorsArray = Object.keys(this.state.data);
 
@@ -199,6 +201,10 @@ class Instructors extends React.Component {
      * Sort object keys alphabetically into instructors.
      */
     sortInstructors(instructors) {
+        if (instructors === undefined) {
+            return;
+        }
+
         var sorted = {};
 
         Object.keys(instructors).sort().forEach((key) => {
