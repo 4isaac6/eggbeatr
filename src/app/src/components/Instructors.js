@@ -99,6 +99,17 @@ class Instructors extends React.Component {
     addInstructor(instructorBody) {
         // Add to database.
         return this.props.createComponent(instructorBody, "Instructor").then((res) => {
+            if (Object.keys(res).length === 0) {
+                res = { "data": {} };
+                res.data[instructorBody.instructor] = instructorBody;
+                res.data[instructorBody.instructor].id = -1;
+                delete res.data[instructorBody.instructor].instructor;
+            }
+
+            if (Object.keys(this.state).length === 0) {
+                this.state = { "data": {} };
+            }
+
             this.sortInstructors(Object.assign(this.state.data, res.data));
 
             return res;
