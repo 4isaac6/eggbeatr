@@ -42,7 +42,7 @@ class ToggleTable extends React.Component {
         var inputValues = [];
         var addRowInputs = this.addRow.inputs;
 
-        if (addRowInputs.length != 3) {
+        if (addRowInputs.length !== 3) {
             this.state.addCallback({});
 
             return;
@@ -57,7 +57,7 @@ class ToggleTable extends React.Component {
             input.setState({ "value": "" });
         }
 
-       this.state.addCallback(inputValues).then(() => this.addNewRow());
+        this.state.addCallback(inputValues).then(() => this.addNewRow());
 
         this.resizeTable();
         this.recolourTable();

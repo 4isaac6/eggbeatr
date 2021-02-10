@@ -287,7 +287,13 @@ class Controller extends React.Component {
                     gridComponent.init();
                 } else if (name === "instructors") {
                     let instructorsComponent = comp;
-                    instructorsComponent.state = this.state.components[name];
+                    //instructorsComponent.state = this.state.components[name];
+
+                    instructorsComponent.state = this.mergeOfflineData(
+                        name,
+                        instructorsComponent.state,
+                        this.state.components[name]
+                    );
 
                     this.state.componentObjects.gridChecklist.setQuantity(
                         "instructors",
@@ -297,7 +303,12 @@ class Controller extends React.Component {
                     instructorsComponent.displayComponentState();
                 } else if (name === "lessons") {
                     let lessonsComponent = comp;
-                    lessonsComponent.state = this.state.components[name];
+
+                    lessonsComponent.state = this.mergeOfflineData(
+                        name,
+                        lessonsComponent.state,
+                        this.state.components[name]
+                    );
 
                     this.state.componentObjects.gridChecklist.setQuantity(
                         "lessons",
@@ -318,6 +329,55 @@ class Controller extends React.Component {
                 }
             }
         }
+    }
+
+    mergeOfflineData(name, componentData, controllerData) {
+        var merged = {};
+
+        if (name === "instructors") {
+            console.log("here1", componentData.data);
+            console.log("here2", controllerData.data);
+
+            for (let key in componentData.data) {
+                if (!(key in controllerData.data)) {
+                    Object.assign(controllerData.data, componentData.data);
+                } else {
+                    //let controllerInstructor = controllerData.data[key];
+                }
+            }
+
+            merged = controllerData;
+        } else if (name === "lessons") {
+            for (let key in componentData.data) {
+                let offlineQuantity;
+                let componentLesson;
+                let controllerLesson;
+
+                if (!(key in controllerData.data)) {
+                    continue;
+                }
+
+                componentLesson = componentData.data[key];
+                controllerLesson = controllerData.data[key];
+
+                offlineQuantity = componentLesson.quantity;
+
+                if (offlineQuantity === 0) {
+                    continue;
+                }
+
+                // Don't overwrite IDs.
+                controllerLesson.quantity = offlineQuantity;
+            }
+
+            merged = controllerData;
+        } else if (name === "privates") {
+
+        }
+
+        this.componentCallback(merged, name, true);
+
+        return merged;
     }
 
     /**

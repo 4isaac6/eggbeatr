@@ -127,6 +127,7 @@ class Lessons extends React.Component {
       * Create a database entry for a new collection of lessons.
       */
     createDatabaseEntry(missingId) {
+        var bodyArray = [];
         var promiseArray = [];
 
         for (let i = 0; i < missingId.length; i++) {
@@ -136,11 +137,20 @@ class Lessons extends React.Component {
                 title: lessonTitle,
             };
 
+            bodyArray.push(body);
             promiseArray.push(this.props.createComponent(body, "Lesson"));
         }
 
         return Promise.all(promiseArray).then((res) => {
-            res.forEach((r)=> {
+            res.forEach((r, index)=> {
+                if (Object.keys(r).length == 0) {
+                    let lessonBody = bodyArray[index];
+
+                    r = { "data": {} };
+
+                    r.data[lessonBody.title] = 0;
+                }
+
                 var lessonData;
                 var lesson = r.data;
                 var lessonTitle = Object.keys(lesson)[0];
@@ -149,6 +159,7 @@ class Lessons extends React.Component {
                 Object.assign(this.state.data[lessonTitle], {
                     "id": lessonData.id
                 });
+
                 this.setState(this.state);
             });
         }).catch(error => console.error(error));

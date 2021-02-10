@@ -209,7 +209,7 @@ tr:hover .line {
 }
 
 th, td {
-    text-align: right;
+    text-align: center;
 }
 
 tbody td:first-child {
@@ -637,8 +637,6 @@ tbody td:first-child {
 }
 
 #dynamicInstructorPreferences th {
-    text-align: center;
-
     width: 150px;
 }
 
@@ -668,10 +666,6 @@ tbody td:first-child {
     width: 70%;
 
     table-layout: fixed;
-}
-
-#dynamicLessons th {
-    text-align: center;
 }
 
 #dynamicLessons td {
@@ -998,10 +992,6 @@ tbody td:first-child {
     margin: 5% 0 0 17%;
 
     table-layout: fixed;
-}
-
-#dynamicGridChecklist th {
-    text-align: center;
 }
 
 #dynamicGridChecklist th, #dynamicGridChecklist td {
